@@ -50,7 +50,7 @@ scrapy crawl mfw_mdd_route
     - details：关于该景点的描述。
   - route.jsonl:
     ```
-    {"mddId": , "mddTitle": , "routeTitle": , "routeId": , "days": 3, "daily_routes": [{"day": "D1", "poi_list": [{"poi_id": , "poi_title": , "time": "1-3小时"}, ... ,{"poi_id": , "poi_title": , "time": "1-3小时"}]}, ... ]}]}
+    {"mddId": , "mddTitle": , "routeTitle": , "routeId": , "days": 3, "daily_routes": [{"day": "D1", "poi_list": [{"poi_id": , "poi_title": , "time": "1-3小时"}, ... ,{"poi_id": , "poi_title": , "time": "1-3小时"}]}, ... ]}
 
     ```
     - mddId: 当前route的起始mdd的Id；
