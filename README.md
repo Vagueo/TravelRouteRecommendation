@@ -7,7 +7,7 @@
   - python环境：python3.9
   - 所需依赖在：requirements.txt中，可以通过```pip install -r requirements.txt```
 ## 1. mfwscrapy:
-  放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目
+  该部分放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目
 ```
   scrapy crawl mfw_mdd_route
 ```
