@@ -51,7 +51,6 @@ scrapy crawl mfw_mdd_route
   - route.jsonl:
     ```
     {"mddId": , "mddTitle": , "routeTitle": , "routeId": , "days": 3, "daily_routes": [{"day": "D1", "poi_list": [{"poi_id": , "poi_title": , "time": "1-3小时"}, ... ,{"poi_id": , "poi_title": , "time": "1-3小时"}]}, ... ]}
-
     ```
     - mddId: 当前route的起始mdd的Id；
     - mddTitle：当前route的起始mdd的名称；
