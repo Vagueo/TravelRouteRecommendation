@@ -1,17 +1,22 @@
 # TravelRouteRecommendation
-该项目共分为三个部分：
+@[TOC](项目说明)
+
+## 项目概述：
+该项目共分为三个部分
 1. 数据集构建部分：mfwscrapy。
 2. 数据集清洗以及划分出训练集和测试集的部分：datasets。
 3. 推荐系统的模型部分。
+## 环境配置：
 - 首先若要正确运行我们的项目，需要配置如下的实验环境：
   - python环境：python3.9
   - 所需依赖在：requirements.txt中，可以通过```pip install -r requirements.txt```
-## 1. mfwscrapy:
-  该部分放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目
+## 项目各部分的具体介绍：
+### 1. mfwscrapy:
+- 该部分放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目
 ```
   scrapy crawl mfw_mdd_route
 ```
-### mfwscrapy的项目结构：
+- mfwscrapy的项目结构：
 ```
 ./spiders/mfw_mdd_route.py: mdd,scenic和route的爬取部分
 
