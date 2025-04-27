@@ -32,5 +32,30 @@ scrapy crawl mfw_mdd_route
 
 ../jscode.js: 用来破解各种ajax请求的参数校验，该部分的代码为_sn生成的代码逻辑
 ```
+- 初始的数据结构：
+  - mdd.jsonl:
+    ```
+    {"mddId": , "mddTitle": , "poi_list": [{"poi_id": , "poi_title": }, ... ,{"poi_id": , "poi_title": }]}
+    ```
+    - mddId: mdd的唯一标识（爬取到的mdd大部分都是城市）；
+    - mddTitle：mdd的名称；
+    - poi_list：当前mdd下的具有代表性的poi列表（一般情况下是15个poi），后续利用poi的details聚类得到mdd的details。
+  - scenic.jsonl:
+    ```
+    {"poi_id": , "poi_title": , "city_id": "11252", "details": }
+    ```
+    - poi_id: 景点的唯一标识；
+    - poi_title：景点的名称；
+    - city_id：景点所在城市的id （可以和mddId一一对应）；
+    - details：关于该景点的描述。
+  - route.jsonl:
+    ```
+    {"mddId": , "mddTitle": , "routeTitle": , "routeId": , "days": 3, "daily_routes": [{"day": "D1", "poi_list": [{"poi_id": , "poi_title": , "time": "1-3小时"}, ... ,{"poi_id": , "poi_title": , "time": "1-3小时"}]}, ... ]}]}
 
-
+    ```
+    - mddId: 当前route的起始mdd的Id；
+    - mddTitle：当前route的起始mdd的名称；
+    - routeId：route的唯一标识；
+    - routeTitle：route的名称；
+    - days：当前旅游线路旅游需要花的天数；
+    - daily_routes：当前的旅游路线，列表中的每个元素为每天的线路。
