@@ -13,7 +13,7 @@
 # 二、环境配置：
 - 首先若要正确运行我们的项目，需要配置如下的实验环境：
   - python环境：python3.9
-  - 所需依赖在：requirements.txt中，可以通过```pip install -r requirements.txt```
+  - 所需依赖在：requirements.txt中，可以通过```pip install -r requirements.txt```命令来安装该项目所需的所有依赖部分。
 # 三、项目各部分的具体介绍：
 ## 1. mfwscrapy:
 - 该部分放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目
