@@ -7,6 +7,7 @@ from scrapy import FormRequest
 from scrapy.selector import Selector
 from mfwscrapy.items import Mdd, Route, Scenic
 
+
 class MfwMddRouteSpider(scrapy.Spider):
     def __init__(self):
         super().__init__()
@@ -287,35 +288,35 @@ class MfwMddRouteSpider(scrapy.Spider):
             # mdd_href = day_div.xpath('.//div[@class="day-hd"]//span[contains(@class, "place ")]/a/@href').get()
             # mdd_name = day_div.xpath('.//div[@class="day-hd"]//span[contains(@class, "place ")]/a/text()').get()
             # 获取当天的所有 mdd（目的地）
-            mdd_nodes = day_div.xpath('.//div[@class="day-hd"]//span[contains(@class, "place ")]/a')
-            mdd_list = []
-            if not mdd_nodes:
-                mdd_list.append({"mddId": route["mddId"], "mddTitle": route["mddTitle"]})
-            for mdd_node in mdd_nodes:
-                mdd_href = mdd_node.xpath('./@href').get()
-                mdd_name = mdd_node.xpath('./text()').get()
-
-                if idx == 0:
-                    # 如果第一天出发地一定是这个线路的mddId和mddTitle
-                    day_route["day"] = day
-                    mdd_from_id = route["mddId"]
-                    mdd_from_name = route["mddTitle"]
-                    mdd_list.append({"mddId":mdd_from_id,"mddTitle":mdd_from_name})
-                else:
-                    # 第二天及以后，前一天的目的地为mdd_from
-                    prev_day = daily_routes[idx - 1]
-                    mdd_from_id = prev_day["mdd_list"][-1].get("mddId")
-                    mdd_from_name = prev_day["mdd_list"][-1].get("mddTitle")
-                    mdd_list.append({"mddId": mdd_from_id, "mddTitle": mdd_from_name})
-                if mdd_href and mdd_name:
-                    mddId = mdd_href.split('/')[-1].replace('.html', '').strip()
-                    mddTitle = re.sub(r'\s+', ' ', mdd_name).strip()  # 清理多余空白字符
-                    mdd_list.append({"mddId": mddId, "mddTitle": mddTitle})
-                    mdd = Mdd()
-                    mdd["mddId"] = mddId
-                    mdd["mddTitle"] = mddTitle
-                    mdd_url = "https://www.mafengwo.cn/jd/" + mdd["mddId"] + "/gonglve.html"
-                    yield scrapy.Request(mdd_url, callback=self.parse_mdd, headers=self.headers, meta={"mdd": mdd})
+            # mdd_nodes = day_div.xpath('.//div[@class="day-hd"]//span[contains(@class, "place ")]/a')
+            # mdd_list = []
+            # if not mdd_nodes:
+            #     mdd_list.append({"mddId": route["mddId"], "mddTitle": route["mddTitle"]})
+            # for mdd_node in mdd_nodes:
+            #     mdd_href = mdd_node.xpath('./@href').get()
+            #     mdd_name = mdd_node.xpath('./text()').get()
+            #
+            #     if idx == 0:
+            #         # 如果第一天出发地一定是这个线路的mddId和mddTitle
+            #         day_route["day"] = day
+            #         mdd_from_id = route["mddId"]
+            #         mdd_from_name = route["mddTitle"]
+            #         mdd_list.append({"mddId":mdd_from_id,"mddTitle":mdd_from_name})
+            #     else:
+            #         # 第二天及以后，前一天的目的地为mdd_from
+            #         prev_day = daily_routes[idx - 1]
+            #         mdd_from_id = prev_day["mdd_list"][-1].get("mddId")
+            #         mdd_from_name = prev_day["mdd_list"][-1].get("mddTitle")
+            #         mdd_list.append({"mddId": mdd_from_id, "mddTitle": mdd_from_name})
+            #     if mdd_href and mdd_name:
+            #         mddId = mdd_href.split('/')[-1].replace('.html', '').strip()
+            #         mddTitle = re.sub(r'\s+', ' ', mdd_name).strip()  # 清理多余空白字符
+            #         mdd_list.append({"mddId": mddId, "mddTitle": mddTitle})
+            #         mdd = Mdd()
+            #         mdd["mddId"] = mddId
+            #         mdd["mddTitle"] = mddTitle
+            #         mdd_url = "https://www.mafengwo.cn/jd/" + mdd["mddId"] + "/gonglve.html"
+            #         yield scrapy.Request(mdd_url, callback=self.parse_mdd, headers=self.headers, meta={"mdd": mdd})
 
             # 获取当天所有的景点
             poi_nodes = day_div.xpath('.//div[@class="poi-name"]//li/span[@class="place"]')
@@ -334,7 +335,7 @@ class MfwMddRouteSpider(scrapy.Spider):
                     yield scrapy.Request("https://www.mafengwo.cn/" + poi_href, callback=self.parse_poi_detail,headers=self.headers, meta={"scenic": scenic})
                     poi_list.append({"poi_id": poi_id, "poi_title": poi_title,"time":data_time})
             day_route["day"] = day
-            day_route["mdd_list"] = mdd_list
+            # day_route["mdd_list"] = mdd_list
             day_route["poi_list"] = poi_list
             daily_routes.append(day_route)
 
@@ -404,8 +405,9 @@ class MfwMddRouteSpider(scrapy.Spider):
 
     def parse_poi_city(self, response):
         scenic = response.meta["scenic"]
-        selector = Selector()
-        city_href = selector.xpath('//*[@id="container"]/div[@class="row row-placeTop row-bg"]/div/div[@class="crumb"]/div[3]/div/span/a/@href').get()
+        # print(response.text)
+        selector = Selector(text=response.text)
+        city_href = selector.xpath('//*[@id="container"]/div[1]/div/div[2]/div[3]/div/span/a/@href').get()
         city_id = city_href.split('/')[-1].replace('.html', '')
         scenic["city_id"] = city_id
         yield scenic
