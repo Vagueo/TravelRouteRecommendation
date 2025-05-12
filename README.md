@@ -22,7 +22,10 @@ scrapy crawl mfw_mdd_route
 ```
 - mfwscrapy的项目结构：
 ```
-./spiders/mfw_mdd_route.py: mdd,scenic和route的爬取部分
+./spiders/mfw_mdd_route.py: mdd,scenic和route的爬取部分 (已弃用，因为会导致数据爬得不够完整，于是拆解成了下面三个部分的代码)
+./spiders/route.py
+./spiders/scenic.py
+./spiders/mdd.py
 
 ./myextend.py：自定义扩展，包括代理的部分
 ./middlewares.py： 中间件，包括代理和cookie等，该部分运用selenium获取到页面的cookies
