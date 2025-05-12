@@ -16,9 +16,14 @@
   - 所需依赖：在requirements.txt中，可以通过```pip install -r requirements.txt```命令来安装该项目所需的所有依赖部分。
 # 三、项目各部分的具体介绍：
 ## 1. mfwscrapy:
-- 该部分放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目
+- 该部分放置的是用来构建我们自己的数据集的部分,配置完上述的实验环境后利用下面的命令在终端运行该项目。
+  【注意】需要依次按照下面的顺序进行，这样才能爬取完整
 ```
-scrapy crawl mfw_mdd_route
+scrapy crawl mfw_mdd_route(弃用)
+scrapy crawl route
+scrapy crawl scenic
+scrapy crawl mdd
+scrapy crawl scenic
 ```
 - mfwscrapy的项目结构：
 ```
