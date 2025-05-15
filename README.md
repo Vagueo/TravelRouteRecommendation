@@ -25,15 +25,15 @@
 ### 1. mfwscrapy
 - 该部分放置的是用来构建我们自己的数据集的代码部分,配置完上述的实验环境后利用下面的命令在终端运行该项目。
   【注意】需要依次按照下面的顺序进行，这样才能爬取完整
-  ```
+    ```
     scrapy crawl mfw_mdd_route(弃用)
     scrapy crawl route
     scrapy crawl scenic
     scrapy crawl mdd
     scrapy crawl scenic
-  ```
+    ```
 - mfwscrapy的项目结构：
-  ```
+    ```
     ./spiders/mfw_mdd_route.py: mdd,scenic和route的爬取部分 (已弃用，因为会导致数据爬得不够完整，于是拆解成了下面三个部分的代码)
     ./spiders/route.py
     ./spiders/scenic.py
@@ -46,7 +46,7 @@
     ./pipelines.py：主要处理持久化逻辑，将mdd，scenic和route分别存入到‘datasets/raw/’这一路径的jsonl文件中
     
     ../jscode.js: 用来破解各种ajax请求的参数校验，该部分的代码为_sn生成的代码逻辑
-  ```
+    ```
 - 初始的数据结构：
   - mdd.jsonl:
     ```
@@ -77,7 +77,7 @@
 ### 2. datasets
 - 该部分存放的是我们的数据集的部分，并且这个部分还有数据预处理的代码部分。
 - 数据集介绍：
-  1. FourSquare数据集：（获取网址```https://sites.google.com/site/yangdingqi/home/foursquare-dataset```）
+  1. FourSquare数据集：（[获取网址](https://sites.google.com/site/yangdingqi/home/foursquare-dataset)）
 
   此数据集包括从 Foursquare 收集的长期（从 2012 年 4 月到 2013 年 9 月的大约 18 个月）全球规模签到数据。它包含 266,909 名用户在 3,680,126 个场所（77 个国家/地区的 415 个城市）的 33,278,683 次签到。这 415 个城市是世界上 Foursquare 用户检查最多的 415 个城市，每个城市都包含至少 10K 个签到。
     - File dataset_TIST2015_Checkins.txt是签到数据，然后分别包含下面这几列：
@@ -102,14 +102,14 @@
   2. MFW数据集：
      该部分数据集通过mfwscrapy获取得到。
 - datasets的项目结构：
-```
-  ./raw/mdd.jsonl：MFW数据集中的mdd信息。
-  ./raw/scenic.jsonl：MFW数据集中的scenic信息。
-  ./raw/route.jsonl：MFW数据集中的
-  ./raw/dataset_TIST2015：FourSquare数据集，该文件夹中包含上述数据集介绍的文件。
-  ./precleaning/FourSquare/trajectories_batch{i}.jsonl（i从0-26）：按照用户划分的线路数据。
-  ./precleaning/MFW：包含进行预处理后的MFW数据集。
-```
+    ```
+    ./raw/mdd.jsonl：MFW数据集中的mdd信息。
+    ./raw/scenic.jsonl：MFW数据集中的scenic信息。
+    ./raw/route.jsonl：MFW数据集中的
+    ./raw/dataset_TIST2015：FourSquare数据集，该文件夹中包含上述数据集介绍的文件。
+    ./precleaning/FourSquare/trajectories_batch{i}.jsonl（i从0-26）：按照用户划分的线路数据。
+    ./precleaning/MFW：包含进行预处理后的MFW数据集。
+    ```
 - 清洗后的数据结构：
   1. FourSquare数据集：
      - route：
@@ -122,9 +122,9 @@
   2. MFW数据集：
      （mdd和poi的各个部分经过清洗后都是不为空的，为空的部分被清理掉了）
     - mdd：
-      ```
+        ```
         {"mddId": , "mddTitle": , "details": }
-      ```
+        ```
       - mddId: mdd的唯一标识（爬取到的mdd大部分都是城市）；
       - mddTitle：mdd的名称；
       - details：将这个mdd下对应的poi_list中的poi的details拼接得到mdd的details。
@@ -147,8 +147,8 @@
   ### 3. model
 - 该部分存放的是推荐的模型、训练和测试的部分以及自回归得到完整线路的部分。
 - 项目结构：
-  ```
+    ```
     ./model/main.py：加载并且划分数据集的部分。
     ./model/model.py：基于城市和景点的双层推荐的模型。
     ./model/train.py：训练一个轮次的函数、评价函数、自回归推理生成的函数以及评估指标计算和打印。
-  ```
+    ```
