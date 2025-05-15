@@ -13,9 +13,9 @@
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. [model](#3model)
 ## 一、项目概述
 该项目共分为如下三个部分：
-1. 数据集构建部分：mfwscrapy。
-2. 数据集存放的位置以及数据清洗的部分：datasets。
-3. 推荐系统的模型部分：model。
+  1. 数据集构建部分：mfwscrapy。
+  2. 数据集存放的位置以及数据清洗的部分：datasets。
+  3. 推荐系统的模型部分：model。
 ## 二、环境配置
 - 首先若要正确运行我们的项目，需要配置如下的实验环境：
   - python环境：python3.9
@@ -25,28 +25,28 @@
 ### 1.mfwscrapy
 - 该部分放置的是用来构建我们自己的数据集的代码部分,配置完上述的实验环境后利用下面的命令在终端运行该项目。
   【注意】需要依次按照下面的顺序进行，这样才能爬取完整
-```
-  scrapy crawl mfw_mdd_route(弃用)
-  scrapy crawl route
-  scrapy crawl scenic
-  scrapy crawl mdd
-  scrapy crawl scenic
-```
+  ```
+    scrapy crawl mfw_mdd_route(弃用)
+    scrapy crawl route
+    scrapy crawl scenic
+    scrapy crawl mdd
+    scrapy crawl scenic
+  ```
 - mfwscrapy的项目结构：
-```
-  ./spiders/mfw_mdd_route.py: mdd,scenic和route的爬取部分 (已弃用，因为会导致数据爬得不够完整，于是拆解成了下面三个部分的代码)
-  ./spiders/route.py
-  ./spiders/scenic.py
-  ./spiders/mdd.py
-  
-  ./myextend.py：自定义扩展，包括代理的部分
-  ./middlewares.py： 中间件，包括代理和cookie等，该部分运用selenium获取到页面的cookies
-  ./settings.py：配置文件
-  ./items.py：mdd,scenic和route的数据结构
-  ./pipelines.py：主要处理持久化逻辑，将mdd，scenic和route分别存入到‘datasets/raw/’这一路径的jsonl文件中
-  
-  ../jscode.js: 用来破解各种ajax请求的参数校验，该部分的代码为_sn生成的代码逻辑
-```
+  ```
+    ./spiders/mfw_mdd_route.py: mdd,scenic和route的爬取部分 (已弃用，因为会导致数据爬得不够完整，于是拆解成了下面三个部分的代码)
+    ./spiders/route.py
+    ./spiders/scenic.py
+    ./spiders/mdd.py
+    
+    ./myextend.py：自定义扩展，包括代理的部分
+    ./middlewares.py： 中间件，包括代理和cookie等，该部分运用selenium获取到页面的cookies
+    ./settings.py：配置文件
+    ./items.py：mdd,scenic和route的数据结构
+    ./pipelines.py：主要处理持久化逻辑，将mdd，scenic和route分别存入到‘datasets/raw/’这一路径的jsonl文件中
+    
+    ../jscode.js: 用来破解各种ajax请求的参数校验，该部分的代码为_sn生成的代码逻辑
+  ```
 - 初始的数据结构：
   - mdd.jsonl:
     ```
