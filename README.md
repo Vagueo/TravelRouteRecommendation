@@ -1,23 +1,24 @@
 # TravelRouteRecommendation
-  一、 [项目概述](#一、项目概述：)
+  一、 [项目概述](#一、项目概述)
   
-  二、 [环境配置](#二、环境配置：)
+  二、 [环境配置](#二、环境配置)
   
-  三、 [项目各部分的具体介绍](#三、项目各部分的具体介绍：)
+  三、 [项目各部分的具体介绍](#三、项目各部分的具体介绍)
   1. [mfwscrapy](#1.mfwscrapy)
   2. [datasets](#2.datasets)
   3. [model](#3.model)
-## 一、项目概述：
+## 一、项目概述
 该项目共分为如下三个部分：
 1. 数据集构建部分：mfwscrapy。
 2. 数据集存放的位置以及数据清洗的部分：datasets。
 3. 推荐系统的模型部分：model。
-## 二、环境配置：
+## 二、环境配置
 - 首先若要正确运行我们的项目，需要配置如下的实验环境：
   - python环境：python3.9
+  - javascript环境：node.js
   - 所需依赖：在requirements.txt中，可以通过```pip install -r requirements.txt```命令来安装该项目所需的所有依赖部分。
-## 三、项目各部分的具体介绍：
-### 1.mfwscrapy:
+## 三、项目各部分的具体介绍
+### 1.mfwscrapy
 - 该部分放置的是用来构建我们自己的数据集的代码部分,配置完上述的实验环境后利用下面的命令在终端运行该项目。
   【注意】需要依次按照下面的顺序进行，这样才能爬取完整
 ```
@@ -69,7 +70,7 @@
     - routeTitle：route的名称；
     - days：当前旅游线路旅游需要花的天数；
     - daily_routes：当前的旅游路线，列表中的每个元素为每天的线路。
-### 2.datasets:
+### 2.datasets
 - 该部分存放的是我们的数据集的部分，并且这个部分还有数据预处理的代码部分。
 - 数据集介绍：
   1. FourSquare数据集：（获取网址```https://sites.google.com/site/yangdingqi/home/foursquare-dataset```）
@@ -106,7 +107,7 @@
 ```
 - 清洗后的数据结构：
   1. FourSquare数据集：
-     route：
+     - route：
      ```
       {"routeId": , "trajectory": [...{"type": "mdd", "mddId": , "mddTitle": , "details": }, {"type": "poi", "poi_id": , "poi_title": ,"mddId": ,"mddTitle": , "details": }...]}
      ```
@@ -115,30 +116,30 @@
      - trajectory：是用户的签到数据，将一个用户的所有签到数据按照时间顺序组合到trajectory中，然后作为一个旅游路线来处理，路线中的每一个地点可以是"mdd"（城市）或是"poi"（景点）。对于mdd，它的details就是City；对于poi，它的details就是它的poi类型（例如：University、Restaurant等等）。
   2. MFW数据集：
      （mdd和poi的各个部分经过清洗后都是不为空的，为空的部分被清理掉了）
-  - mdd：
-    ```
-      {"mddId": , "mddTitle": , "details": }
-    ```
-    - mddId: mdd的唯一标识（爬取到的mdd大部分都是城市）；
-    - mddTitle：mdd的名称；
-    - details：将这个mdd下对应的poi_list中的poi的details拼接得到mdd的details。
-  - scenic.jsonl:
-    ```
-    {"poi_id": , "poi_title": , "details":, "mddId": , "mddTitle": }
-    ```
-    - poi_id: 景点的唯一标识；
-    - poi_title：景点的名称；
-    - details：关于该景点的描述；
-    - mddId：景点所在城市的id （可以和mddId一一对应）；
-    - mddTitle：景点所在城市的名称。
-  - route:
-    ```
-    {"routeId": , "trajectory": [...{"type": "mdd", "mddId": , "mddTitle": , "details": }, {"type": "poi", "poi_id": , "poi_title": ,"mddId": ,"mddTitle": , "details": }...]}
-    ```
-    - routeId：将原来的route按照天数拆分开后，如果拆分开后的地点数量小于3则进行合并操作，经过拆分与合并后的路线的routeId为将合并前的最小天数加入到原routeId的末尾。
-      （如：假设有一条线路的routeId为123_45，将第1、2、3天的线路进行了合并后，新的routeId为"123_451"，这样仍然保持了routeId的唯一性。）
-    - trajectory：原线路中只有poi，我们将poi对应的mdd先加到这个poi前面，如果有相邻的几个poi的mdd都是相同的不会重复加入。
-### 3.model：
+    - mdd：
+      ```
+        {"mddId": , "mddTitle": , "details": }
+      ```
+      - mddId: mdd的唯一标识（爬取到的mdd大部分都是城市）；
+      - mddTitle：mdd的名称；
+      - details：将这个mdd下对应的poi_list中的poi的details拼接得到mdd的details。
+    - scenic.jsonl:
+      ```
+      {"poi_id": , "poi_title": , "details":, "mddId": , "mddTitle": }
+      ```
+      - poi_id: 景点的唯一标识；
+      - poi_title：景点的名称；
+      - details：关于该景点的描述；
+      - mddId：景点所在城市的id （可以和mddId一一对应）；
+      - mddTitle：景点所在城市的名称。
+    - route:
+      ```
+      {"routeId": , "trajectory": [...{"type": "mdd", "mddId": , "mddTitle": , "details": }, {"type": "poi", "poi_id": , "poi_title": ,"mddId": ,"mddTitle": , "details": }...]}
+      ```
+      - routeId：将原来的route按照天数拆分开后，如果拆分开后的地点数量小于3则进行合并操作，经过拆分与合并后的路线的routeId为将合并前的最小天数加入到原routeId的末尾。
+        （如：假设有一条线路的routeId为123_45，将第1、2、3天的线路进行了合并后，新的routeId为"123_451"，这样仍然保持了routeId的唯一性。）
+      - trajectory：原线路中只有poi，我们将poi对应的mdd先加到这个poi前面，如果有相邻的几个poi的mdd都是相同的不会重复加入。
+  ### 3.model
 - 该部分存放的是推荐的模型、训练和测试的部分以及自回归得到完整线路的部分。
 - 项目结构：
   ```
