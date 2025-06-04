@@ -11,7 +11,7 @@ from mfwscrapy.items import Mdd, Route, Scenic
 class MfwMddRouteSpider(scrapy.Spider):
     def __init__(self):
         super().__init__()
-        with open("D:/Project/pythonProject/mfwscrapy/jscode.js", 'r', encoding='utf-8') as f:
+        with open("./jscode.js", 'r', encoding='utf-8') as f:
             self.js_ctx = execjs.compile(f.read())
 
     name = "mfw_mdd_route"
@@ -33,11 +33,11 @@ class MfwMddRouteSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        page = 15
+        page = 1
         yield from self.fetch_page(page)
 
     def fetch_page(self,page):
-        if page < 1: return
+        if page > 15: return
         data = {
             "mddid": "21536",
             "page": str(page),
@@ -81,8 +81,8 @@ class MfwMddRouteSpider(scrapy.Spider):
             }
             yield scrapy.Request(route_url,callback=self.parse_route_pages,headers=headers,meta={"mdd":mdd})
 
-        next_page = page - 1
-        if next_page >= 1:
+        next_page = page + 1
+        if next_page <= 15:
             yield from self.fetch_page(next_page)
         else:
             # with open(self.save_path, "a", encoding="utf-8") as f:
@@ -120,7 +120,7 @@ class MfwMddRouteSpider(scrapy.Spider):
             poi_title_raw = li.xpath('./a/@title').get()
 
             # 解码 title
-            poi_title = None
+            # poi_title = None
             if poi_title_raw and "\\u" in poi_title_raw:
                 try:
                     poi_title = poi_title_raw.encode().decode("unicode_escape")
@@ -135,8 +135,8 @@ class MfwMddRouteSpider(scrapy.Spider):
                 poi_id = poi_url.split('/')[-1].replace('.html', '')
                 scenic["poi_id"] = poi_id
                 scenic["poi_title"] = poi_title
-                scenic["city_id"] = mdd["mddId"]
-
+                scenic["mddId"] = mdd["mddId"]
+                scenic["mddTitle"] = mdd["mddTitle"]
 
                 poi_list.append({"poi_id": scenic["poi_id"], "poi_title": scenic["poi_title"]})
                 yield scrapy.Request(
@@ -166,7 +166,7 @@ class MfwMddRouteSpider(scrapy.Spider):
     #             poi_id = poi_url.split('/')[-1].replace('.html', '')
     #             scenic["poi_id"] = poi_id
     #             scenic["poi_title"] = poi_title
-    #             scenic["city_id"] = mdd["mddId"]
+    #             scenic["mddId"] = mdd["mddId"]
     #
     #             TOP5.append({"poi_id": scenic["poi_id"], "poi_title": scenic["poi_title"]})
     #             yield scrapy.Request(
@@ -392,29 +392,31 @@ class MfwMddRouteSpider(scrapy.Spider):
         if city_below_href:
             belong_url = 'https://www.mafengwo.cn/'+city_below_href
             yield scrapy.Request(belong_url,callback=self.parse_poi_city,headers=self.headers,meta={"scenic":scenic})
-            # city_id = city_href.split('/')[-1].replace('.html', '')
-            # scenic["city_id"] = city_id
+            # mddId = city_href.split('/')[-1].replace('.html', '')
+            # scenic["mddId"] = mddId
             #
             # # 请求 MDD 页面
             # mdd = Mdd()
-            # mdd["mddId"] = city_id
-            # mdd_url = f"https://www.mafengwo.cn/jd/{city_id}/gonglve.html"
+            # mdd["mddId"] = mddId
+            # mdd_url = f"https://www.mafengwo.cn/jd/{mddId}/gonglve.html"
             # yield scrapy.Request(mdd_url, callback=self.parse_mdd, headers=self.headers, meta={"mdd": mdd})
         # else:
-        #     scenic["city_id"] = None  # 防止后续 KeyError
+        #     scenic["mddId"] = None  # 防止后续 KeyError
 
     def parse_poi_city(self, response):
         scenic = response.meta["scenic"]
         # print(response.text)
         selector = Selector(text=response.text)
         city_href = selector.xpath('//*[@id="container"]/div[1]/div/div[2]/div[3]/div/span/a/@href').get()
-        city_id = city_href.split('/')[-1].replace('.html', '')
-        scenic["city_id"] = city_id
+        mddId = city_href.split('/')[-1].replace('.html', '')
+        city_name = selector.xpath('//*[@id="container"]/div[1]/div/div[2]/div[3]/div/span/a/text()').get()
+        scenic["mddId"] = mddId
         yield scenic
         # 请求 MDD 页面
         mdd = Mdd()
-        mdd["mddId"] = city_id
-        mdd_url = f"https://www.mafengwo.cn/jd/{city_id}/gonglve.html"
+        mdd["mddId"] = mddId
+        mdd["mddTitle"] = city_name
+        mdd_url = f"https://www.mafengwo.cn/jd/{mddId}/gonglve.html"
         yield scrapy.Request(mdd_url, callback=self.parse_mdd, headers=self.headers, meta={"mdd": mdd})
     def extract_details(self, selector):
         # 第二种结构（container -> summary）
@@ -437,13 +439,13 @@ class MfwMddRouteSpider(scrapy.Spider):
     #         city_href = selector.xpath('//div[contains(@class, "top-info")]//span/a/@href').get()
     #
     #     if city_href:
-    #         city_id = city_href.split('/')[-1].replace('.html', '')
-    #         scenic["city_id"] = city_id
+    #         mddId = city_href.split('/')[-1].replace('.html', '')
+    #         scenic["mddId"] = mddId
     #
     #         # 继续处理
     #         mdd = Mdd()
-    #         mdd["mddId"] = city_id
-    #         mdd_url = f"https://www.mafengwo.cn/jd/{city_id}/gonglve.html"
+    #         mdd["mddId"] = mddId
+    #         mdd_url = f"https://www.mafengwo.cn/jd/{mddId}/gonglve.html"
     #         yield scrapy.Request(mdd_url, callback=self.parse_mdd, headers=self.headers, meta={"mdd": mdd})
     #     else:
     #         self.logger.warning(f"[parse_poi_detail] 未找到 city_href，URL: {response.url}")
