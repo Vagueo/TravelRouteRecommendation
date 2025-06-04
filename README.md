@@ -100,28 +100,6 @@
     ./precleaning/MFW/virtual_routes.jsonl：未经过数据泄露处理的生成的虚拟路线数据。
     ./precleaning/MFW/virtual_routes_filtered.jsonl：经过数据泄露处理后的生成的虚拟路线数据。
     ```
-（已弃用）FourSquare数据集：（[获取网址](https://sites.google.com/site/yangdingqi/home/foursquare-dataset)）
-
-  此数据集包括从 Foursquare 收集的长期（从 2012 年 4 月到 2013 年 9 月的大约 18 个月）全球规模签到数据。它包含 266,909 名用户在 3,680,126 个场所（77 个国家/地区的 415 个城市）的 33,278,683 次签到。这 415 个城市是世界上 Foursquare 用户检查最多的 415 个城市，每个城市都包含至少 10K 个签到。
-    - File dataset_TIST2015_Checkins.txt是签到数据，然后分别包含下面这几列：
-      1. User ID (anonymized)
-      2. Venue ID (Foursquare)
-      3. UTC time
-      4. Timezone offset in minutes (The offset in minutes between when this check-sin occurred and the same time in UTC, i.e., UTC time + offset is the local time)
-    - File dataset_TIST2015_POIs.txt是poi信息，然后分别包含下面这几列：
-      1. Venue ID (Foursquare) 
-      2. Latitude
-      3. Longitude
-      4. Venue category name (Foursquare)
-      5. Country code (ISO 3166-1 alpha-2 two-letter country codes)
-  
-    - File dataset_TIST2015_Cities.txt涉及415个城市的数据，分别包含下面这几列：
-      1. City name
-      2. Latitude (of City center)
-      3. Longitude (of City center)
-      4. Country code (ISO 3166-1 alpha-2 two-letter country codes)
-      5. Country name
-      6. City type (e.g., national capital, provincial capital)
 - 清洗后的数据结构：
   ```
      {
