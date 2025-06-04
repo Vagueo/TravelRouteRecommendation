@@ -75,9 +75,32 @@
     - days：当前旅游线路旅游需要花的天数；
     - daily_routes：当前的旅游路线，列表中的每个元素为每天的线路。
 ### 2. datasets
-- 该部分存放的是我们的数据集的部分，并且这个部分还有数据预处理的代码部分。
+- 该部分存放的是我们的数据集和数据预处理及清洗的代码部分。
 - 数据集介绍：
-  1. FourSquare数据集：（[获取网址](https://sites.google.com/site/yangdingqi/home/foursquare-dataset)）
+  1. 预训练数据集：（生成的虚拟路线数据集）
+  - 生成步骤：
+  （1）先通过datasets/addLoc给清洗后城市数据加上经纬度信息得到mdd_step3_with_details.json；
+  （2）再结合mdd_step3_with_details.json和清洗后的景点数据scenic_step2.jsonl，进行路线生成：
+      - 起点选择：随机选取一个城市作为出发点；
+      - 路径扩展：在每一步中，根据以下两种方式之一扩展路径：第一种城市内跳转，在当前城市内，随机选择一个景点节点进行移动；第二种城市间跳转，跳转至另一个与当前城市地理距离不超过300公里的城市节点。
+      - 最终生成5000条虚拟路线，并且每条线路中的地点数为10-12个```（经过数据泄露处理后只有4058条）```
+  2. 微调数据集：（真实的热门路线数据集）
+     该部分数据集通过mfwscrapy获取得到。
+- datasets的项目结构：
+    ```
+    ./raw/mdd.jsonl：真实MFW数据集中的城市信息。
+    ./raw/scenic.jsonl：真实MFW数据集中的景点信息。
+    ./raw/route.jsonl：真实MFW数据集中的路线信息。
+    ./precleaning/MFW/route_step0_deduplicated.jsonl：去重后线路数据。
+    ./precleaning/MFW/mdd_step1.jsonl：清洗后的城市数据。
+    ./precleaning/MFW/scenic_step2.jsonl.jsonl：清洗后的景点数据。
+    ./precleaning/MFW/mdd_step3_with_details.jsonl：聚合了城市下的景点的details得到城市的details的城市数据。
+    ./precleaning/MFW/mdd_step3_with_details_with_location.jsonl：加上了经纬度的城市数据。
+    ./precleaning/MFW/route_step4.jsonl：最终得到的真实线路数据。
+    ./precleaning/MFW/virtual_routes.jsonl：未经过数据泄露处理的生成的虚拟路线数据。
+    ./precleaning/MFW/virtual_routes_filtered.jsonl：经过数据泄露处理后的生成的虚拟路线数据。
+    ```
+（已弃用）FourSquare数据集：（[获取网址](https://sites.google.com/site/yangdingqi/home/foursquare-dataset)）
 
   此数据集包括从 Foursquare 收集的长期（从 2012 年 4 月到 2013 年 9 月的大约 18 个月）全球规模签到数据。它包含 266,909 名用户在 3,680,126 个场所（77 个国家/地区的 415 个城市）的 33,278,683 次签到。这 415 个城市是世界上 Foursquare 用户检查最多的 415 个城市，每个城市都包含至少 10K 个签到。
     - File dataset_TIST2015_Checkins.txt是签到数据，然后分别包含下面这几列：
@@ -99,56 +122,37 @@
       4. Country code (ISO 3166-1 alpha-2 two-letter country codes)
       5. Country name
       6. City type (e.g., national capital, provincial capital)
-  2. MFW数据集：
-     该部分数据集通过mfwscrapy获取得到。
-- datasets的项目结构：
-    ```
-    ./raw/mdd.jsonl：MFW数据集中的mdd信息。
-    ./raw/scenic.jsonl：MFW数据集中的scenic信息。
-    ./raw/route.jsonl：MFW数据集中的
-    ./raw/dataset_TIST2015：FourSquare数据集，该文件夹中包含上述数据集介绍的文件。
-    ./precleaning/FourSquare/trajectories_batch{i}.jsonl（i从0-26）：按照用户划分的线路数据。
-    ./precleaning/MFW：包含进行预处理后的MFW数据集。
-    ```
 - 清洗后的数据结构：
-  1. FourSquare数据集：
-     - route：
-     ```
-      {"routeId": , "trajectory": [...{"type": "mdd", "mddId": , "mddTitle": , "details": }, {"type": "poi", "poi_id": , "poi_title": ,"mddId": ,"mddTitle": , "details": }...]}
-     ```
-     （将用户的签到数据转换为一条线路数据）
-     - routeId: 由于User ID为唯一标识，因此将User ID作为routeId。
-     - trajectory：是用户的签到数据，将一个用户的所有签到数据按照时间顺序组合到trajectory中，然后作为一个旅游路线来处理，路线中的每一个地点可以是"mdd"（城市）或是"poi"（景点）。对于mdd，它的details就是City；对于poi，它的details就是它的poi类型（例如：University、Restaurant等等）。
-  2. MFW数据集：
-     （mdd和poi的各个部分经过清洗后都是不为空的，为空的部分被清理掉了）
-    - mdd：
-        ```
-        {"mddId": , "mddTitle": , "details": }
-        ```
-      - mddId: mdd的唯一标识（爬取到的mdd大部分都是城市）；
-      - mddTitle：mdd的名称；
-      - details：将这个mdd下对应的poi_list中的poi的details拼接得到mdd的details。
-    - scenic.jsonl:
-      ```
-      {"poi_id": , "poi_title": , "details":, "mddId": , "mddTitle": }
-      ```
-      - poi_id: 景点的唯一标识；
-      - poi_title：景点的名称；
-      - details：关于该景点的描述；
-      - mddId：景点所在城市的id （可以和mddId一一对应）；
-      - mddTitle：景点所在城市的名称。
-    - route:
-      ```
-      {"routeId": , "trajectory": [...{"type": "mdd", "mddId": , "mddTitle": , "details": }, {"type": "poi", "poi_id": , "poi_title": ,"mddId": ,"mddTitle": , "details": }...]}
-      ```
-      - routeId：将原来的route按照天数拆分开后，如果拆分开后的地点数量小于3则进行合并操作，经过拆分与合并后的路线的routeId为将合并前的最小天数加入到原routeId的末尾。
-        （如：假设有一条线路的routeId为123_45，将第1、2、3天的线路进行了合并后，新的routeId为"123_451"，这样仍然保持了routeId的唯一性。）
-      - trajectory：原线路中只有poi，我们将poi对应的mdd先加到这个poi前面，如果有相邻的几个poi的mdd都是相同的不会重复加入。
+  ```
+     {
+        "route_id": ,
+        "trajectory": [
+          {
+            "type": "mdd",
+            "mddId": mddId,
+            "mddTitle": mddTitle,
+            "details": details
+          },
+          {
+            "type": "poi",
+            "poi_id": poi_id,
+            "poi_title": poi_title,
+            "mddId": mddId,
+            "mddTitle": mddTitle,
+            "details": details
+          },
+          ....
+        ]
+    }
+  ```
   ### 3. model
 - 该部分存放的是推荐的模型、训练和测试的部分以及自回归得到完整线路的部分。
 - 项目结构：
     ```
-    ./model/main.py：加载并且划分数据集的部分。
-    ./model/model.py：基于城市和景点的双层推荐的模型。
-    ./model/train.py：训练一个轮次的函数、评价函数、自回归推理生成的函数以及评估指标计算和打印。
+    ./model/generate_virtual_routes.py：生成虚拟路线的部分。
+    ./model/main.py：加载数据集并且进行预训练和微调的部分。
+    ./model/model.py：基于城市和景点的双层推荐的模型以及多头注意力机制构建的模型部分。
+    ./model/train.py：训练一个轮次的函数、评价函数以及评估指标计算和打印结构的部分。
+    ./model/spilt.py：用来划分虚拟数据集的训练和验证集以及真实数据集的训练、验证和测试集的部分。
+    ./model/config.py：一些基础参数的设置部分。
     ```
