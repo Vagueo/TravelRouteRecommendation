@@ -125,22 +125,22 @@ def split_all_datasets():
     mfw_test_subs = [sub for traj in mfw_test_encoded for sub in generate_sub_trajectories_fixed_window(traj)]
 
     ## 保存真实子轨迹
-    if not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_train_val_routes.jsonl") \
-        and not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_test_routes.jsonl") \
-        and not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_train_val_subs.jsonl")\
-        and not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_test_subs.jsonl"):
+    if not os.path.exists("../datasets/finetuning/mfw_real_train_val_routes.jsonl") \
+        and not os.path.exists("../datasets/finetuning/mfw_real_test_routes.jsonl") \
+        and not os.path.exists("../datasets/finetuning/mfw_real_train_val_subs.jsonl")\
+        and not os.path.exists("../datasets/finetuning/mfw_real_test_subs.jsonl"):
         # 编码前完整路径
-        save_sub_trajectories(train_val_trajs,"D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_train_val_routes.jsonl")
-        save_sub_trajectories(test_trajs,"D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_test_routes.jsonl")
+        save_sub_trajectories(train_val_trajs,"../datasets/finetuning/mfw_real_train_val_routes.jsonl")
+        save_sub_trajectories(test_trajs,"../datasets/finetuning/mfw_real_test_routes.jsonl")
         # 编码后子序列
-        save_sub_trajectories(all_subs, "D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_train_val_subs.jsonl")
-        save_sub_trajectories(mfw_test_subs, "D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_test_subs.jsonl")
+        save_sub_trajectories(all_subs, "../datasets/finetuning/mfw_real_train_val_subs.jsonl")
+        save_sub_trajectories(mfw_test_subs, "../datasets/finetuning/mfw_real_test_subs.jsonl")
 
     # Stage 2: 加载MFW虚拟生成的路线
-    if not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl") \
-        and not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl") \
-        and not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs.jsonl") \
-        and not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs.jsonl"):
+    if not os.path.exists("../datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl") \
+        and not os.path.exists("../datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl") \
+        and not os.path.exists("../datasets/pretraining/mfw_virtual_train_subs.jsonl") \
+        and not os.path.exists("../datasets/pretraining/mfw_virtual_val_subs.jsonl"):
         generate()
     else:
         print(f"These files already exists. Skipping generation.")
@@ -159,11 +159,11 @@ def split_all_datasets():
     mfw_virtual_val_subs_filtered = [sub for traj in mfw_virtual_val_trajs_filtered for sub in generate_sub_trajectories_fixed_window(traj)]
     # mfw_virtual_test_subs = [sub for traj in mfw_virtual_test_trajs for sub in generate_sub_trajectories_fixed_window(traj, input_len=3)]
 
-    if not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl") and \
-        not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl"):
+    if not os.path.exists("../datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl") and \
+        not os.path.exists("../datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl"):
         # 保存子轨迹
-        save_sub_trajectories(mfw_virtual_train_subs_filtered, "D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl")
-        save_sub_trajectories(mfw_virtual_val_subs_filtered, "D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl")
+        save_sub_trajectories(mfw_virtual_train_subs_filtered, "../datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl")
+        save_sub_trajectories(mfw_virtual_val_subs_filtered, "../datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl")
     # MFW虚拟生成的路线的编码（全部用作预训练训练集）,未处理数据泄露的
     print(f"Loading MFW virtual routes from {mfw_virtual_path}")
     mfw_virtual_routes = load_routes([mfw_virtual_path])
@@ -178,11 +178,11 @@ def split_all_datasets():
     mfw_virtual_train_subs = [sub for traj in mfw_virtual_train_trajs for sub in generate_sub_trajectories_fixed_window(traj)]
     mfw_virtual_val_subs = [sub for traj in mfw_virtual_val_trajs for sub in generate_sub_trajectories_fixed_window(traj)]
 
-    if not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs.jsonl") and \
-        not os.path.exists("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs.jsonl"):
+    if not os.path.exists("../datasets/pretraining/mfw_virtual_train_subs.jsonl") and \
+        not os.path.exists("../datasets/pretraining/mfw_virtual_val_subs.jsonl"):
         # 保存子轨迹
-        save_sub_trajectories(mfw_virtual_train_subs, "D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs.jsonl")
-        save_sub_trajectories(mfw_virtual_val_subs, "D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs.jsonl")
+        save_sub_trajectories(mfw_virtual_train_subs, "../datasets/pretraining/mfw_virtual_train_subs.jsonl")
+        save_sub_trajectories(mfw_virtual_val_subs, "../datasets/pretraining/mfw_virtual_val_subs.jsonl")
     return mfw_encoded, mfw_virtual_encoded
 
 

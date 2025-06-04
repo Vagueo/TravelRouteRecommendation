@@ -204,8 +204,8 @@ def main():
 
     # Stage 1: MFW虚拟生成的路线进行预训练
     # 预训练阶段未处理数据泄露的部分
-    mfw_virtual_train_subs = load_sub_routes("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs.jsonl")
-    mfw_virtual_val_subs = load_sub_routes("D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs.jsonl")
+    mfw_virtual_train_subs = load_sub_routes("../datasets/pretraining/mfw_virtual_train_subs.jsonl")
+    mfw_virtual_val_subs = load_sub_routes("../datasets/pretraining/mfw_virtual_val_subs.jsonl")
 
     train_dataset_mfw_virtual = POITrajectoryDataset(mfw_virtual_train_subs, bert_out_dim, bert_cls_dict, max_len=max_len,
                                             domain_labels=[1] * len(mfw_virtual_train_subs))
@@ -216,9 +216,9 @@ def main():
 
     # 预训练阶段处理了数据泄露的部分
     mfw_virtual_train_subs_filtered = load_sub_routes(
-        "D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl")
+        "../datasets/pretraining/mfw_virtual_train_subs_filtered.jsonl")
     mfw_virtual_val_subs_filtered = load_sub_routes(
-        "D:/Project/pythonProject/mfwscrapy/datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl")
+        "../datasets/pretraining/mfw_virtual_val_subs_filtered.jsonl")
 
     train_dataset_mfw_virtual_filtered = POITrajectoryDataset(mfw_virtual_train_subs_filtered, bert_out_dim, bert_cls_dict,
                                                      max_len=max_len,
@@ -254,8 +254,8 @@ def main():
     )
 
     # Stage 2: MFW微调
-    all_subs = load_sub_routes("D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_train_val_subs.jsonl")
-    mfw_test_subs = load_sub_routes("D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_test_subs.jsonl")
+    all_subs = load_sub_routes("../datasets/finetuning/mfw_real_train_val_subs.jsonl")
+    mfw_test_subs = load_sub_routes("../datasets/finetuning/mfw_real_test_subs.jsonl")
     # ———————— 1. 准备 “全轨迹” 列表 ————————
     # 训练／验证集的全轨迹
     train_full_seqs = [

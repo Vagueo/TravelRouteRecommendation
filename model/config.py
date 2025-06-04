@@ -6,10 +6,10 @@ import torch
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # 加载数据集的文件路径
-mfw_path = Path('D:/Project/pythonProject/mfwscrapy/datasets/precleaning/MFW/route_step4.jsonl')
-mfw_virtual_path = Path('D:/Project/pythonProject/mfwscrapy/datasets/precleaning/MFW/virtual_routes.jsonl')
-mfw_virtual_path_filtered = Path('D:/Project/pythonProject/mfwscrapy/datasets/precleaning/MFW/virtual_routes_filtered.jsonl')
-fs_dir = Path('D:/Project/pythonProject/mfwscrapy/datasets/precleaning/FourSquare')
+mfw_path = Path('../datasets/precleaning/MFW/route_step4.jsonl')
+mfw_virtual_path = Path('../datasets/precleaning/MFW/virtual_routes.jsonl')
+mfw_virtual_path_filtered = Path('../datasets/precleaning/MFW/virtual_routes_filtered.jsonl')
+fs_dir = Path('../datasets/precleaning/FourSquare')
 foursquare_paths = [
     fs_dir / f'trajectories_batch{i}.jsonl' for i in range(1)
 ]

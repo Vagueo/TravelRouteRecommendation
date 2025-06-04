@@ -247,14 +247,14 @@ def generate():
 
     print(f"生成了 {len(virtual_routes)} 条虚拟路线，保存到 virtual_routes.jsonl")
 
-    real_route_file = 'D:/Project/pythonProject/mfwscrapy/datasets/finetuning/mfw_real_test_routes.jsonl'  # 真实的轨迹测试集文件路径
+    real_route_file = '../datasets/finetuning/mfw_real_test_routes.jsonl'  # 真实的轨迹测试集文件路径
     real_routes = load_real_routes(real_route_file)
 
     # 过滤与真实轨迹的测试集高度重合的虚拟路线
     virtual_routes_filtered = filter_exact_subsequence_routes(virtual_routes, real_routes, window_size=2)
 
     # 保存最终版本
-    with open('D:/Project/pythonProject/mfwscrapy/datasets/precleaning/MFW/virtual_routes_filtered.jsonl', 'w', encoding='utf-8') as f:
+    with open('../datasets/precleaning/MFW/virtual_routes_filtered.jsonl', 'w', encoding='utf-8') as f:
         for route in virtual_routes_filtered:
             f.write(json.dumps(route, ensure_ascii=False) + '\n')
 
