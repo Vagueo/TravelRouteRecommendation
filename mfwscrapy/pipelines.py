@@ -61,7 +61,7 @@ class BasePipeline:
 class MddPipeline(BasePipeline):
     def __init__(self):
         super().__init__(
-            file_path="D:/Project/pythonProject/mfwscrapy/datasets/raw/mdd.jsonl",
+            file_path="./datasets/raw/mdd.jsonl",
             unique_key="mddId",
             required_fields=["mddId", "mddTitle"],
             allowed_item_type=Mdd
@@ -79,7 +79,7 @@ class MddPipeline(BasePipeline):
 class RoutePipeline(BasePipeline):
     def __init__(self):
         super().__init__(
-            file_path="D:/Project/pythonProject/mfwscrapy/datasets/raw/route.jsonl",
+            file_path="./datasets/raw/route.jsonl",
             unique_key="routeId",
             required_fields=["routeId", "routeTitle"],
             allowed_item_type=Route
@@ -88,9 +88,9 @@ class RoutePipeline(BasePipeline):
 class ScenicPipeline(BasePipeline):
     def __init__(self):
         super().__init__(
-            file_path="D:/Project/pythonProject/mfwscrapy/datasets/raw/scenic.jsonl",
+            file_path="./datasets/raw/scenic.jsonl",
             unique_key="poi_id",
-            required_fields=["poi_id", "city_id", "poi_title"],
+            required_fields=["poi_id", "poi_title", "mddId", "mddTitle"],
             allowed_item_type=Scenic
         )
 
@@ -98,10 +98,14 @@ class ScenicPipeline(BasePipeline):
         # 丢弃 details 字段为空或无实际描述的 scenic 项
         if isinstance(item, Scenic):
             details = item.get("details", "").strip()
-            title = item.get("poi_title", "").strip()
-            if not details or len(details) <= 5 or details == title:
-                msg = f"[DROP] poi_id={item.get('poi_id')} 的 details 无效（为空/与标题相同），已丢弃"
+            if not details:
+                msg = f"[DROP] poi_id={item.get('poi_id')} 的为空已丢弃"
                 print(msg)
                 raise DropItem(msg)
+            # title = item.get("poi_title", "").strip()
+            # if not details or len(details) <= 5 or details == title:
+            #     msg = f"[DROP] poi_id={item.get('poi_id')} 的 details 无效（为空/与标题相同），已丢弃"
+            #     print(msg)
+            #     raise DropItem(msg)
 
         return super().process_item(item, spider)

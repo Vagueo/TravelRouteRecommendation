@@ -1,32 +1,32 @@
 # 自定义扩展，包括代理和MySql链接
-from pymongo import MongoClient
+# from pymongo import MongoClient
 from scrapy import signals
 import random
 from retrying import retry
 
-class MongoConnect:
-    def __init__(self) -> None:
-          # Set your username, password, database, and cluster URL
-        # username = ""
-        # password = ""
-        database = "mafengwo"
-        port = 27017
-        host = "localhost"
-        connection_url = f"mongodb://localhost:27017/mafengwo"
-
-        # 连接到Mongo数据库
-        client = MongoClient(connection_url)
-        self.client = client
-        db = client.get_database(database)
-        self.db = db
-        # Select the database to use
-        self.note = db.get_collection("detail")
-        self.scenic = db.get_collection("scenic")
-        self.mdd = db.get_collection("mdd")
-        self.zyx = db.get_collection("zyx")
-        self.route = db.get_collection("route")
-
-mongo = MongoConnect()
+# class MongoConnect:
+#     def __init__(self) -> None:
+#           # Set your username, password, database, and cluster URL
+#         # username = ""
+#         # password = ""
+#         database = "mafengwo"
+#         port = 27017
+#         host = "localhost"
+#         connection_url = f"mongodb://localhost:27017/mafengwo"
+#
+#         # 连接到Mongo数据库
+#         client = MongoClient(connection_url)
+#         self.client = client
+#         db = client.get_database(database)
+#         self.db = db
+#         # Select the database to use
+#         self.note = db.get_collection("detail")
+#         self.scenic = db.get_collection("scenic")
+#         self.mdd = db.get_collection("mdd")
+#         self.zyx = db.get_collection("zyx")
+#         self.route = db.get_collection("route")
+#
+# mongo = MongoConnect()
 
 class Proxy:
     def __init__(self):
@@ -75,10 +75,10 @@ class MyExtend:
         """爬虫启动时执行的操作"""
         spider.logger.info("爬虫启动：初始化数据库连接...")
         # 例如，可以在启动时预加载一些数据
-        spider.mongo = mongo
+        # spider.mongo = mongo
 
     def spider_closed(self, spider, reason):
         """爬虫关闭时执行的操作"""
         spider.logger.info(f"爬虫关闭，原因：{reason}")
         # 这里可以清理资源，例如关闭数据库连接
-        mongo.client.close()
+        # mongo.client.close()

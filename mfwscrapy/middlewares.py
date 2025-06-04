@@ -3,7 +3,6 @@ from scrapy.http import Request, Response
 from twisted.internet.error import TimeoutError, TCPTimedOutError
 from selenium import webdriver
 from selenium.webdriver import EdgeOptions
-from selenium.webdriver.edge.service import Service
 import time
 from mfwscrapy.myextend import pro
 
@@ -27,7 +26,7 @@ class MfwscrapyDownloaderMiddleware:
                 })
             """
         })
-        time.sleep(5)  # 等待页面加载
+        time.sleep(10)  # 等待页面加载
         browser.get('https://www.mafengwo.cn/')
         cookies = browser.get_cookies()
         browser.quit()

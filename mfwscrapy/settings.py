@@ -22,7 +22,7 @@ ROBOTSTXT_OBEY = False
 LOG_LEVEL = "ERROR"
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 4
+CONCURRENT_REQUESTS = 6
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -77,10 +77,10 @@ AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 AUTOTHROTTLE_START_DELAY = 3
 # The maximum download delay to be set in case of high latencies
-AUTOTHROTTLE_MAX_DELAY = 30
+AUTOTHROTTLE_MAX_DELAY = 20
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+AUTOTHROTTLE_TARGET_CONCURRENCY = 0.9
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
 
