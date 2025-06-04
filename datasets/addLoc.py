@@ -4,7 +4,7 @@ import time
 import requests
 
 BAIDU_API_URL = "http://api.map.baidu.com/geocoding/v3/"
-AK = "FSv7j092U3istB0F5dSRVEFHNN3WK7oR"  # <-- 替换为你自己的 AK
+AK = ""  # <-- 替换为你自己的 AK
 
 def get_location(name):
     try:
